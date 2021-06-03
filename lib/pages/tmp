@@ -1,0 +1,91 @@
+SafeArea(
+        minimum: EdgeInsets.all(8),
+        child: Column(
+          children: <Widget>[
+            Wrap(
+              children: <Widget>[
+                Card(
+                  color: Colors.orange,
+                  child: Container(
+                    width: (MediaQuery.of(context).size.width),
+                    //height: 100.0,
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                           ListTile(
+                            leading: Icon(Icons.accessibility_new, size: 80, color: Colors.white,),
+                            title: Text((formater.format(worldCases.toInt())).toString(), style: TextStyle(fontSize: 60.0, color: Colors.white)),
+                            subtitle: Text("Infections", style: TextStyle(fontSize: 20.0, color: Colors.white),),
+                          ),
+
+                          /*Sparkline(
+                            data: dataTimeline,
+                            lineColor: Colors.red,
+                            pointsMode: PointsMode.all,
+                          )*/
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Card(
+                  color: Colors.red,
+                  child: Container(
+                    width: (MediaQuery.of(context).size.width * 0.5) - 16,
+                    height: 100.0,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Deaths"),
+                        Text(worldDeaths.toString()),
+                        Text("(Today cases 123)")
+                      ],
+                    ),
+                  ),
+                ),
+                Card(
+                  color: Colors.green,
+                  child: Container(
+                    width: (MediaQuery.of(context).size.width * 0.5) - 16,
+                    height: 100.0,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text("Recovered"),
+                        Text(worldRecovered.toString()),
+                        Text("(Today cases 123)")
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Container(
+              alignment: Alignment.centerLeft,
+              padding: EdgeInsets.symmetric(vertical: 8.0),
+              child: Text("Affected Countries"),
+            ),
+            Expanded(
+              child: FutureBuilder(
+                  future: fetchSummaryCountryStats(),
+                  builder: (BuildContext context, AsyncSnapshot snapshot) {
+                    if (snapshot.data != null) {
+                      List<CountryStats> data = snapshot.data;
+                      return ListView.builder(
+                          itemCount: data.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            return buildList(snapshot.data[index]);
+                          });
+                    } else {
+                      return CircularProgressIndicator();
+                    }
+                  }),
+            )
+          ],
+        ),
+      ),
